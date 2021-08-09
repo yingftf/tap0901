@@ -1,4 +1,4 @@
-package tap0901
+package src
 
 import "testing"
 
@@ -18,7 +18,7 @@ func Test_queue_push(t *testing.T) {
 	assert(q.push(4), t, "push failed!")
 	assert(q.push(5), t, "push failed!")
 	for i := 5; i < QUEUE_SIZE; i++ {
-		q.push(i+1)
+		q.push(i + 1)
 	}
 	assert(!q.push(1), t, "push failed, not full!")
 }

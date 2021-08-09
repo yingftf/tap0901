@@ -1,8 +1,8 @@
-package tap0901
+package src
 
 import (
-	"testing"
 	"net"
+	"testing"
 	"time"
 )
 
@@ -10,7 +10,7 @@ var tun *Tun
 
 func TestOpenTun(t *testing.T) {
 	var err error
-	tun, err = OpenTun(net.IP([]byte{0,0,0,0}), net.IP([]byte{0,0,0,0}), net.IP([]byte{0,0,0,0}))
+	tun, err = OpenTun(net.IP([]byte{0, 0, 0, 0}), net.IP([]byte{0, 0, 0, 0}), net.IP([]byte{0, 0, 0, 0}))
 	if err != nil {
 		t.Error(err)
 	}
