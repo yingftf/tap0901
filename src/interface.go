@@ -9,6 +9,8 @@ import (
 	"syscall"
 	"unsafe"
 
+	//	"os"
+
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/registry"
 )
@@ -72,7 +74,7 @@ type Tun struct {
 //         mask -> remoteNetmask
 // 该函数用于为后续的操作配置网络
 // tun将处理本地ip和远程网络之间的传输
-func OpenTun(addr, network, mask net.IP) (*Tun, error) {
+func OpenTun(addr, network, mask net.IP) (*Tun, error) { // wintap.c 225 需改造
 	id, err := getTuntapComponentId() //读取并返回TUNTAP设备注册表中 "NetCfgInstanceId" 键值
 	if err != nil {
 		return nil, err
@@ -98,7 +100,7 @@ func OpenTun(addr, network, mask net.IP) (*Tun, error) {
 	tun.FD, err = syscall.CreateFile(
 		&fName[0],
 		syscall.GENERIC_READ|syscall.GENERIC_WRITE,
-		syscall.FILE_SHARE_READ|syscall.FILE_SHARE_WRITE,
+		0, //syscall.FILE_SHARE_READ|syscall.FILE_SHARE_WRITE,
 		nil,
 		syscall.OPEN_EXISTING,
 		syscall.FILE_ATTRIBUTE_SYSTEM|syscall.FILE_FLAG_OVERLAPPED,
@@ -305,6 +307,7 @@ func (tun *Tun) Write(data []byte) error {
 	return syscall.WriteFile(tun.FD, data, &l, &tun.reusedOverlapped)
 }
 
+//读取数据
 func (tun *Tun) postReadRequest() error {
 	hevent, err := windows.CreateEvent(nil, 0, 0, nil)
 	if err != nil {
@@ -322,6 +325,7 @@ func (tun *Tun) postReadRequest() error {
 	return syscall.ReadFile(tun.FD, ev.buff, &l, &overlapped)
 }
 
+//开始工作
 func (tun *Tun) Worker() {
 	for tun.listening {
 		if err := tun.postReadRequest(); err != nil {
@@ -336,6 +340,7 @@ func (tun *Tun) Worker() {
 	}
 }
 
+//tun停止服务
 func (tun *Tun) SignalStop() error {
 	if !tun.listening {
 		return errors.New("tun is not listenning")
