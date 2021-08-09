@@ -1,0 +1,4 @@
+github.com/inszva/tap0901 v0.0.0-20170111121940-193959613e53 h1:bY9zyIfelc+4Js+JNcP8qH0GsWwYWTpYNpMjfTg+GU8=
+github.com/inszva/tap0901 v0.0.0-20170111121940-193959613e53/go.mod h1:6rmGIIoIhz1Donb5jwRpIIaL36DjMMqzNG0YSSZZb7g=
+golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 h1:siQdpVirKtzPhKl3lZWozZraCFObP8S1v6PRp0bLrtU=
+golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

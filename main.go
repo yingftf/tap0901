@@ -1,12 +1,13 @@
-package main
+package tap0901
 
 import (
+	"encoding/hex"
+	"fmt"
 	"net"
 	"sync"
-	"github.com/inszva/tap0901"
 	"time"
-	"fmt"
-	"encoding/hex"
+
+	"github.com/inszva/tap0901"
 )
 
 func main() {
@@ -17,15 +18,15 @@ func main() {
 	tun.Connect()
 	time.Sleep(2 * time.Second)
 
-	tun.SetReadHandler(func (tun *tap0901.Tun, data []byte) {
+	tun.SetReadHandler(func(tun *tap0901.Tun, data []byte) {
 		fmt.Println(hex.EncodeToString(data))
 	})
 	wp := sync.WaitGroup{}
 	wp.Add(1)
-	go func () {
+	go func() {
 		tun.Listen(1)
 		wp.Done()
-	} ()
+	}()
 	time.Sleep(2 * time.Second)
 	laddr, _ := net.ResolveUDPAddr("udp4", "123.123.123.123:15645")
 	raddr, _ := net.ResolveUDPAddr("udp4", "123.2.3.4:25457")
@@ -39,7 +40,7 @@ func main() {
 	conn.Write([]byte("abcdefg"))
 	conn.Write([]byte("abcdefg"))
 	//tun.Write([]byte("abcdefg"))
-	time.Sleep(10*time.Second)
+	time.Sleep(10 * time.Second)
 	tun.SignalStop()
 	wp.Wait()
 
